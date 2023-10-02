@@ -15,7 +15,16 @@
 </head>
 
 <body>
-    <h1 id="titleSnaxe">Snaxe!</h1>
+
+    <?php
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
+    echo "This is a warning error";
+    include("file.php");
+    ?>
+
+    <?php include 'header.php'; ?>
+
     <p id="score">Score: 0</p>
     <div id="gameContainer">
         <canvas id="gameCanvas" width="600" height="600"></canvas>
@@ -27,12 +36,26 @@
         const boxSize = 20;
         let score = 0;
 
-        const foods = [
-            { emoji: "🍆", score: 10 },
-            { emoji: "💦", score: 15 },
-            { emoji: "🍑", score: 20 },
-            { emoji: "🍒", score: 25 },
-            { emoji: "🍌", score: 30 }
+        const foods = [{
+                emoji: "🍆",
+                score: 10
+            },
+            {
+                emoji: "💦",
+                score: 15
+            },
+            {
+                emoji: "🍑",
+                score: 20
+            },
+            {
+                emoji: "🍒",
+                score: 25
+            },
+            {
+                emoji: "🍌",
+                score: 30
+            }
         ];
 
         let currentFood = randomFood();
@@ -52,8 +75,14 @@
             "images/girl-1/step-7.jpeg"
         ];
         const imageElement = document.getElementById("sideImage");
-        let snake = [{ x: 5, y: 5 }];
-        let food = { x: Math.floor(Math.random() * 30), y: Math.floor(Math.random() * 30) };
+        let snake = [{
+            x: 5,
+            y: 5
+        }];
+        let food = {
+            x: Math.floor(Math.random() * 30),
+            y: Math.floor(Math.random() * 30)
+        };
         let dx = 1;
         let dy = 0;
         const scoreElement = document.getElementById("score");
@@ -61,10 +90,22 @@
         document.addEventListener("keydown", changeDirection);
 
         function changeDirection(e) {
-            if (e.keyCode == 37 && dx === 0) { dx = -1; dy = 0; } // Left
-            if (e.keyCode == 38 && dy === 0) { dx = 0; dy = -1; } // Up
-            if (e.keyCode == 39 && dx === 0) { dx = 1; dy = 0; } // Right
-            if (e.keyCode == 40 && dy === 0) { dx = 0; dy = 1; } // Down
+            if (e.keyCode == 37 && dx === 0) {
+                dx = -1;
+                dy = 0;
+            } // Left
+            if (e.keyCode == 38 && dy === 0) {
+                dx = 0;
+                dy = -1;
+            } // Up
+            if (e.keyCode == 39 && dx === 0) {
+                dx = 1;
+                dy = 0;
+            } // Right
+            if (e.keyCode == 40 && dy === 0) {
+                dx = 0;
+                dy = 1;
+            } // Down
         }
 
         function updateImage() {
@@ -73,19 +114,37 @@
 
         function drawGame() {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             // Check if the snake hits the border
-            if (snake[0].x < 0) { dx = 1; dy = 0; } // Left border
-            if (snake[0].x > (canvas.width / boxSize) - 1) { dx = -1; dy = 0; } // Right border
-            if (snake[0].y < 0) { dx = 0; dy = 1; } // Top border
-            if (snake[0].y > (canvas.height / boxSize) - 1) { dx = 0; dy = -1; } // Bottom border
+            if (snake[0].x < 0) {
+                dx = 1;
+                dy = 0;
+            } // Left border
+            if (snake[0].x > (canvas.width / boxSize) - 1) {
+                dx = -1;
+                dy = 0;
+            } // Right border
+            if (snake[0].y < 0) {
+                dx = 0;
+                dy = 1;
+            } // Top border
+            if (snake[0].y > (canvas.height / boxSize) - 1) {
+                dx = 0;
+                dy = -1;
+            } // Bottom border
 
             // Move the snake
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            const head = {
+                x: snake[0].x + dx,
+                y: snake[0].y + dy
+            };
             snake.unshift(head);
 
             if (snake[0].x === food.x && snake[0].y === food.y) {
-                food = { x: Math.floor(Math.random() * 30), y: Math.floor(Math.random() * 30) };
+                food = {
+                    x: Math.floor(Math.random() * 30),
+                    y: Math.floor(Math.random() * 30)
+                };
                 score += currentFood.score;
                 scoreElement.innerText = "Score: " + score;
                 currentFood = randomFood();

@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Snaxe</title>
-</head>
+<?php include 'header.php'; ?>
+
 <body>
 
     <header>
@@ -15,9 +9,9 @@
 
     <main>
         <div class="images-container">
-            <a href="snaxe.html">
-            <img src="images/choice/choice-1.jpeg" alt="Image 1">
-        </a>
+            <a href="snaxe.php">
+                <img src="images/choice/choice-1.jpeg" alt="Image 1">
+            </a>
             <img src="images/choice/choice-2.jpeg" alt="Image 2">
             <img src="images/choice/choice-3.jpeg" alt="Image 3">
             <img src="images/choice/choice-4.jpeg" alt="Image 4">
@@ -30,4 +24,5 @@
     </footer>
 
 </body>
+
 </html>
