@@ -12,12 +12,12 @@
     font-family: 'Roboto-Thin';
     src: url('fonts/Roboto-Thin.ttf') format('truetype');
 }
-
+/* 
 #gameContainer {
     display: flex;
     justify-content: center; 
     align-items: center; 
-}
+} */
 
 canvas {
     border: 1px solid black;
@@ -69,8 +69,7 @@ p {
 }
 
 .images-container img {
-    border: 3px solid #333;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px gray;
     max-height: 250px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -92,4 +91,11 @@ footer {
     }
 }
 
+#gameMenu {
+    display: block;
+    outline: 1px dashed deeppink;
+}
 
+#game {
+    display: block;
+}
