@@ -89,6 +89,32 @@ function gameOver() {
     document.getElementById("restartButton").style.display = 'block';
 }
 
+function drawSnakePart(part) {
+    const gradient = context.createLinearGradient(part.x * boxSize, part.y * boxSize, (part.x + 1) * boxSize, (part.y + 1) * boxSize);
+    gradient.addColorStop(0, "limegreen"); // Début de gradient
+    gradient.addColorStop(1, "green");    // Fin de gradient
+
+    context.fillStyle = gradient;
+    context.fillRect(part.x * boxSize, part.y * boxSize, boxSize, boxSize);
+
+    context.shadowColor = 'black';
+    context.shadowBlur = 5;
+    context.shadowOffsetX = 2;
+    context.shadowOffsetY = 2;
+
+    const cornerRadius = 5;
+    context.lineJoin = "round";
+    context.lineWidth = cornerRadius;
+
+    // Remplissage d'un rectangle arrondi
+    context.strokeRect(part.x * boxSize + (cornerRadius / 2), part.y * boxSize + (cornerRadius / 2), boxSize - cornerRadius, boxSize - cornerRadius);
+    context.fillRect(part.x * boxSize + (cornerRadius / 2), part.y * boxSize + (cornerRadius / 2), boxSize - cornerRadius, boxSize - cornerRadius);
+
+    context.shadowBlur = 0;
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+}
+
 function drawGame() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -120,10 +146,7 @@ function drawGame() {
     }
 
     // Draw snake
-    snake.forEach(part => {
-        context.fillStyle = "green";
-        context.fillRect(part.x * boxSize, part.y * boxSize, boxSize, boxSize);
-    });
+    snake.forEach(drawSnakePart);
 
     // Draw food
     context.font = "20px Arial";
