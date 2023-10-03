@@ -4,6 +4,9 @@ const boxSize = 20;
 let score = 0;
 const scoreElement = document.getElementById("score");
 
+const grassImage = new Image();
+grassImage.src = "images/patterns/grass.png";
+
 const foods = [
     {emoji: "🍆", score: 10},
     {emoji: "💦", score: 15},
@@ -134,6 +137,8 @@ document.addEventListener("keydown", function(e) {
 });
 
 function drawGame() {
+
+    
 
     if (isPaused) {
         context.clearRect(0, 0, canvas.width, canvas.height);
