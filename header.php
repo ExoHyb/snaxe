@@ -18,6 +18,4 @@
 
     <header>
         <h1>Snaxe</h1>
-        <p>Il faut savoir se détendre</p>
-        <?php include 'menu.php'; ?>
     </header>

@@ -2,7 +2,12 @@
 
 <div class="container" id="game">
     <div id="gameMenu">
-        <p id="score">Score: 0</p>
+        <ul>
+            <li>
+                <a href="index.php">Retour aux choix d'un modèle</a>
+            </li>
+            <li id="score">Score: 0</li>
+        </ul>
         <button id="restartButton" style="display:none;">Restart</button>
     </div>
     <div id="gameContainer">
