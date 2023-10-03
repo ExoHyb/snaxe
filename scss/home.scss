@@ -1,0 +1,27 @@
+.images-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 80px 0;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    img {
+        border: 1px gray;
+        max-height: 250px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        &:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+    }
+}
+
+// Responsive : 
+
+@media (max-width: 800px) {
+    .images-container img {
+        max-height: 200px;
+    }
+}

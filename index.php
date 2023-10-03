@@ -12,10 +12,4 @@
     </div>
 </main>
 
-<footer>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.</p>
-</footer>
-
-</body>
-
-</html>
+<?php include 'footer.php'; ?>
