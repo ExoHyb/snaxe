@@ -115,7 +115,34 @@ function drawSnakePart(part) {
     context.shadowOffsetY = 0;
 }
 
+let isPaused = false;
+
+function togglePause() {
+    if (isPaused) {
+        isPaused = false;
+        gameInterval = setInterval(drawGame, 100);  // Redémarre le jeu
+    } else {
+        isPaused = true;
+        clearInterval(gameInterval);  // Arrête le jeu
+    }
+}
+
+document.addEventListener("keydown", function(e) {
+    if (e.code === "Space") {  // Si la touche enfoncée est la barre d'espace
+        togglePause();
+    }
+});
+
 function drawGame() {
+
+    if (isPaused) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.font = "50px Arial";
+        context.textAlign = "center";
+        context.fillText("PAUSED", canvas.width / 2, canvas.height / 2);
+        return;  // Sortie précoce pour ne pas dessiner le reste du jeu
+    }
+    
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Update snake position
