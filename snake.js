@@ -8,11 +8,11 @@ const grassImage = new Image();
 grassImage.src = "images/patterns/grass.png";
 
 const foods = [
-    {emoji: "🍆", score: 10},
-    {emoji: "💦", score: 15},
-    {emoji: "🍑", score: 20},
-    {emoji: "🍒", score: 25},
-    {emoji: "🍌", score: 30}
+    {emoji: "🍆", score: 100},
+    {emoji: "💦", score: 100},
+    {emoji: "🍑", score: 100},
+    {emoji: "🍒", score: 100},
+    {emoji: "🍌", score: 100}
 ];
 
 let currentFood = randomFood();
@@ -100,7 +100,7 @@ function drawSnakePart(part) {
     context.fillStyle = gradient;
     context.fillRect(part.x * boxSize, part.y * boxSize, boxSize, boxSize);
 
-    context.shadowColor = 'black';
+    context.shadowColor = '#666666';
     context.shadowBlur = 5;
     context.shadowOffsetX = 2;
     context.shadowOffsetY = 2;

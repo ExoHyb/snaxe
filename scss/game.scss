@@ -1,27 +1,85 @@
 #gameContainer {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
 canvas {
-    border: 1px solid black;
+    border: 1px solid #aaa !important;
     background-color: #f4f4f4;
-    margin-right: 20px;
+    margin-right: 2px;
 }
 
 #sideImage {
-    max-width: 400px;
+    max-height: 502px;
+    border: 1px solid #aaa;
+    padding: 1px;
 }
 
 #gameMenu {
-    display: block;
-    outline: 1px dashed deeppink;
+    max-width: 800px;
+    margin: auto;
+    ul {
+        display: inline-flex;
+        flex: auto;
+        align-items: center;    
+    }
+    #score {
+        font-size: 1.5rem;
+    }
+    li {
+        list-style: none;
+        margin-right: 3rem;
+        font-family: 'Roboto-Light', sans-serif;
+        color: #666;
+        a {
+            color: #666;
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 }
 
-#game {
-    display: block;
-    * {
-        outline: 1px dashed deeppink;
+#discover {
+    text-align: center;
+    > h2 {
+        font-family: 'Fuggles', sans-serif;
+        font-size: 5rem!important;
+        margin-bottom: 2.5rem;
+        &:after {
+            content: '';
+            width: 200px;
+            height: 1px;
+            display: block;
+            margin: auto;
+            background-color: #666;
+        }
+    }
+    img {
+        // max-width: 200px;
+        width: 200px;
+    }
+    .affiliate {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        a {
+            margin-right: 2.5rem;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+        &:first-of-type {
+            margin-bottom: 1.5rem;
+        }
+        &:last-child {
+            img {
+                max-width: 50px;
+            }
+        }
     }
 }
