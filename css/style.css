@@ -34,28 +34,83 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 canvas {
-  border: 1px solid black;
+  border: 1px solid #aaa !important;
   background-color: #f4f4f4;
-  margin-right: 20px;
+  margin-right: 2px;
 }
 
 #sideImage {
-  max-width: 400px;
+  max-height: 502px;
+  border: 1px solid #aaa;
+  padding: 1px;
 }
 
 #gameMenu {
-  display: block;
-  outline: 1px dashed deeppink;
+  max-width: 800px;
+  margin: auto;
+}
+#gameMenu ul {
+  display: inline-flex;
+  flex: auto;
+  align-items: center;
+}
+#gameMenu #score {
+  font-size: 1.5rem;
+}
+#gameMenu li {
+  list-style: none;
+  margin-right: 3rem;
+  font-family: "Roboto-Light", sans-serif;
+  color: #666;
+}
+#gameMenu li a {
+  color: #666;
+  text-decoration: none;
+}
+#gameMenu li a:hover {
+  text-decoration: underline;
 }
 
-#game {
-  display: block;
+#discover {
+  text-align: center;
 }
-#game * {
-  outline: 1px dashed deeppink;
+#discover > h2 {
+  font-family: "Fuggles", sans-serif;
+  font-size: 5rem !important;
+  margin-bottom: 2.5rem;
+}
+#discover > h2:after {
+  content: "";
+  width: 200px;
+  height: 1px;
+  display: block;
+  margin: auto;
+  background-color: #666;
+}
+#discover img {
+  width: 200px;
+}
+#discover .affiliate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#discover .affiliate a {
+  margin-right: 2.5rem;
+}
+#discover .affiliate a:last-child {
+  margin-right: 0;
+}
+#discover .affiliate:first-of-type {
+  margin-bottom: 1.5rem;
+}
+#discover .affiliate:last-child img {
+  max-width: 50px;
 }
 
 .images-container {
