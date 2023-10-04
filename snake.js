@@ -14,6 +14,12 @@ let mushroom = null;
 let mushroomEffectActive = false;
 let mushroomEffectTimeout = null;
 let mushroomTimeout = null;
+let bonusEmoji = null;
+let bonusTimeout = null;
+let bonusInterval = null;
+const bonusDisplayTime = 7000; // 7 seconds
+const bonusIntervalTime = 30000; // 30 seconds
+
 
 const grassImage = new Image();
 grassImage.src = "images/patterns/grass.png";
@@ -46,9 +52,14 @@ let dx = 1;
 let dy = 0;
 let isPaused = false;
 
+grassImage.onload = function() {
+    drawGame(); // Ensure grass pattern is loaded before drawing game
+};
+
 function startGame() {
     gameStarted = true;
     initializeGame();
+    drawGame();  // Ensure initial draw occurs after game initialization
 }
 
 function drawStartButton() {
@@ -85,6 +96,10 @@ function initializeGame() {
     document.getElementById("restartButton").style.display = 'none';
     updateImage();
     gameInterval = setInterval(drawGame, 100);
+    setTimeout(() => {
+        generateBonusEmoji();
+        bonusInterval = setInterval(generateBonusEmoji, bonusIntervalTime);
+    }, 5000); // First appearance after 45 seconds / 45000
 }
 
 function updateImage() {
@@ -148,6 +163,29 @@ function applyMushroomEffect() {
     }, effectDuration);
 }
 
+function generateBonusEmoji() {
+    bonusEmoji = {
+        x: Math.floor(Math.random() * (canvas.width / boxSize)),
+        y: Math.floor(Math.random() * (canvas.height / boxSize))
+    };
+
+    bonusTimeout = setTimeout(() => {
+        bonusEmoji = null;
+    }, bonusDisplayTime);
+}
+
+function showPopup() {
+    let randomGifNumber = Math.floor(Math.random() * 5) + 1; // Assuming you have 5 GIFs numbered gif-1.gif, gif-2.gif, etc.
+    // document.getElementById("randomGif").src = "images/gif/gif-" + randomGifNumber + ".gif";
+    document.getElementById("randomGif").src = "images/gif.gif-1.gif";
+    document.getElementById("popup").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+    togglePause(); // Resume the game after closing the popup
+}
+
 function changeDirection(e) {
     if (e.key === 'ArrowLeft' && dx === 0) {dx = -1; dy = 0;}
     if (e.key === 'ArrowUp' && dy === 0) {dx = 0; dy = -1;}
@@ -177,6 +215,8 @@ function gameOver() {
         localStorage.setItem('bestScore', bestScore);
         bestScoreElement.innerText = "Best Score: " + bestScore;
     }
+    clearInterval(bonusInterval);
+    clearTimeout(bonusTimeout);
 }
 
 function drawSnakePart(part) {
@@ -205,22 +245,22 @@ document.addEventListener("keydown", function(e) {
     if (e.key === 'ArrowUp' && dy === 0) {dx = 0; dy = -1; e.preventDefault();}
     if (e.key === 'ArrowRight' && dx === 0) {dx = 1; dy = 0; e.preventDefault();}
     if (e.key === 'ArrowDown' && dy === 0) {dx = 0; dy = 1; e.preventDefault();}
-
     // For pausing game
-    if (e.key === " " || e.key === "Space") {  // We check for both possible values here
+    if (e.key === " " || e.key === "Space") {  // Check for both possible values
         e.preventDefault();
         togglePause();
     }
 });
 
+let gamePaused = false;
+
 function togglePause() {
-    if (isPaused) {
-        isPaused = false;
-        gameInterval = setInterval(drawGame, 100);
+    if (gamePaused) {
+        gameInterval = setInterval(drawGame, 100); // Assuming 100ms per frame
+        gamePaused = false;
     } else {
-        isPaused = true;
         clearInterval(gameInterval);
-        drawGame(); // Call drawGame explicitly to draw the paused state immediately.
+        gamePaused = true;
     }
 }
 
@@ -296,6 +336,15 @@ function drawGame() {
     if (mushroom) {
         context.fillText("🍄", mushroom.x * boxSize, (mushroom.y + 1) * boxSize);
     }
+    // Draw bonus emoji if it exists
+    if (bonusEmoji) {
+        context.fillText("🎉", bonusEmoji.x * boxSize, (bonusEmoji.y + 1) * boxSize);
+    }
+    if (bonusEmoji && head.x === bonusEmoji.x && head.y === bonusEmoji.y) {
+        score += 500;  // Arbitrary bonus score value, adjust as desired
+        bonusEmoji = null;
+        clearTimeout(bonusTimeout);
+    }
 }
 
 document.getElementById("restartButton").addEventListener("click", function() {
@@ -305,4 +354,3 @@ document.getElementById("restartButton").addEventListener("click", function() {
 })
 
 drawGame(); // Appel initial pour dessiner l'écran (y compris le bouton de démarrage).
-
