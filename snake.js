@@ -10,6 +10,10 @@ const bestScoreElement = document.getElementById("bestScore");
 bestScoreElement.innerText = "Best Score: " + bestScore;
 let skull = null;
 let skullTimeout = null;
+let mushroom = null;
+let mushroomEffectActive = false;
+let mushroomEffectTimeout = null;
+let mushroomTimeout = null;
 
 const grassImage = new Image();
 grassImage.src = "images/patterns/grass.png";
@@ -108,6 +112,41 @@ function generateRandomPositionForSkull() {
     }
 }
 
+function generateRandomPositionForMushroom() {
+    if (!mushroom && Math.random() < 0.1) {  // 10% chance and only if there's no existing mushroom
+        mushroom = {
+            x: Math.floor(Math.random() * (canvas.width / boxSize)),
+            y: Math.floor(Math.random() * (canvas.height / boxSize))
+        };
+        
+        // Remove the mushroom after 30 seconds
+        mushroomTimeout = setTimeout(() => {
+            mushroom = null;
+        }, 30000); // 30 seconds
+    }
+}
+
+function applyMushroomEffect() {
+    if (mushroomEffectActive) return;  // If already active, do nothing
+
+    mushroomEffectActive = true;
+    let effectDuration = 10000;  // 10 seconds
+
+    const effectInterval = setInterval(() => {
+        score = Math.ceil(score * 0.95);  // Decrease score by 5%
+        scoreElement.innerText = "Score: " + score;
+        if (score <= 0) {
+            clearInterval(effectInterval);
+            gameOver();
+        }
+    }, 1000);  // Decrease every second
+
+    // After effect duration, clear the effect
+    mushroomEffectTimeout = setTimeout(() => {
+        clearInterval(effectInterval);
+        mushroomEffectActive = false;
+    }, effectDuration);
+}
 
 function changeDirection(e) {
     if (e.key === 'ArrowLeft' && dx === 0) {dx = -1; dy = 0;}
@@ -212,6 +251,7 @@ function drawGame() {
     if (head.y > (canvas.height / boxSize) - 1) head.y = 0;
     snake.unshift(head);
     generateRandomPositionForSkull();
+    generateRandomPositionForMushroom();
     if (checkCollisionWithSelf()) {
         gameOver();
         return;
@@ -245,6 +285,16 @@ function drawGame() {
     if (skull && head.x === skull.x && head.y === skull.y) {
         gameOver();
         return;
+    }
+    // Check for mushroom consumption
+    if (head.x === mushroom.x && head.y === mushroom.y) {
+        mushroom = null;  // Consume the mushroom
+        clearTimeout(mushroomTimeout);
+        applyMushroomEffect();
+    }
+    // Draw mushroom if it exists
+    if (mushroom) {
+        context.fillText("🍄", mushroom.x * boxSize, (mushroom.y + 1) * boxSize);
     }
 }
 
