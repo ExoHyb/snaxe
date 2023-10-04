@@ -7,6 +7,7 @@
                 <a href="index.php">Choisir un nouveau modèle</a>
             </li>
             <li id="score">Score: 0</li>
+            <li id="bestScore"></li>
         </ul>
         <button id="restartButton" style="display:none;">Restart</button>
     </div>

@@ -5,6 +5,9 @@ let score = 0;
 const scoreElement = document.getElementById("score");
 let gameStarted = false; 
 let gameInterval;  // Declare gameInterval
+let bestScore = localStorage.getItem('bestScore') || 0;
+const bestScoreElement = document.getElementById("bestScore");
+bestScoreElement.innerText = "Best Score: " + bestScore;
 
 const grassImage = new Image();
 grassImage.src = "images/patterns/grass.png";
@@ -22,8 +25,13 @@ let currentFood = randomFood();
 const imagesArray = [
     "images/girl-1/step-1.jpeg",
     "images/girl-1/step-2.jpeg",
-    // ... (rest of your image paths)
+    "images/girl-1/step-3.jpeg",
+    "images/girl-1/step-4.jpeg",
+    "images/girl-1/step-5.jpeg",
+    "images/girl-1/step-6.jpeg",
+    "images/girl-1/step-7.jpeg"
 ];
+
 const imageElement = document.getElementById("sideImage");
 
 let snake = [{x: 5, y: 5}];
@@ -38,11 +46,11 @@ function startGame() {
 }
 
 function drawStartButton() {
-    context.fillStyle = '#4CAF50'; // Couleur de fond du bouton
-    context.fillRect(canvas.width / 4, canvas.height / 2 - 30, canvas.width / 2, 60); // Dessine le bouton
+    context.fillStyle = '#DDD'; // Couleur de fond du bouton
+    //context.fillRect(canvas.width / 4, canvas.height / 2 - 30, canvas.width / 2, 60); // Dessine le bouton
 
-    context.fillStyle = 'white'; // Couleur du texte
-    context.font = '30px Arial';
+    context.fillStyle = '#666'; // Couleur du texte
+    context.font = "30px 'Roboto-Light', sans-serif";
     context.textAlign = 'center';
     context.fillText("Commencer la partie", canvas.width / 2, canvas.height / 2 + 10);
 }
@@ -105,10 +113,16 @@ function checkCollisionWithSelf() {
 function gameOver() {
     clearInterval(gameInterval);
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = "50px Arial";
+    context.font = "130px 'Fuggles', sans-serif";
+    context.fillStyle = '#666'
     context.textAlign = "center";
-    context.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
+    context.fillText("Game Over", canvas.width / 2, canvas.height / 2);
     document.getElementById("restartButton").style.display = 'block';
+    if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem('bestScore', bestScore);
+        bestScoreElement.innerText = "Best Score: " + bestScore;
+    }
 }
 
 function drawSnakePart(part) {
@@ -139,14 +153,13 @@ function drawSnakePart(part) {
 
 document.addEventListener("keydown", function(e) {
     // For direction change
-    if (e.key === 'ArrowLeft' && dx === 0) {dx = -1; dy = 0;}
-    if (e.key === 'ArrowUp' && dy === 0) {dx = 0; dy = -1;}
-    if (e.key === 'ArrowRight' && dx === 0) {dx = 1; dy = 0;}
-    if (e.key === 'ArrowDown' && dy === 0) {dx = 0; dy = 1;}
+    if (e.key === 'ArrowLeft' && dx === 0) {dx = -1; dy = 0; e.preventDefault();}
+    if (e.key === 'ArrowUp' && dy === 0) {dx = 0; dy = -1; e.preventDefault();}
+    if (e.key === 'ArrowRight' && dx === 0) {dx = 1; dy = 0; e.preventDefault();}
+    if (e.key === 'ArrowDown' && dy === 0) {dx = 0; dy = 1; e.preventDefault();}
     
     // For pausing game
     if (e.key === " " || e.key === "Space") {  // We check for both possible values here
-        console.log("Space key pressed");  
         e.preventDefault();
         togglePause();
     }
@@ -154,13 +167,12 @@ document.addEventListener("keydown", function(e) {
 
 function togglePause() {
     if (isPaused) {
-        console.log("Resuming the game");  // Log when the game resumes
         isPaused = false;
         gameInterval = setInterval(drawGame, 100);
     } else {
-        console.log("Pausing the game");  // Log when the game pauses
         isPaused = true;
         clearInterval(gameInterval);
+        drawGame(); // Call drawGame explicitly to draw the paused state immediately.
     }
 }
 
@@ -172,12 +184,22 @@ function drawGame() {
     }
 
     if (isPaused) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.font = "50px Arial";
+        const pauseWindowWidth = canvas.width * 0.5;
+        const pauseWindowHeight = canvas.height * 0.3;
+        const x = (canvas.width - pauseWindowWidth) / 2;
+        const y = (canvas.height - pauseWindowHeight) / 2;
+    
+    
+        context.fillStyle = '#FFF';
+        context.font = "150px 'Fuggles', sans-serif";
         context.textAlign = "center";
-        context.fillText("PAUSED", canvas.width / 2, canvas.height / 2);
-        return;  // Sortie précoce pour ne pas dessiner le reste du jeu
+        context.fillText("Pause", canvas.width / 2, canvas.height / 2 + 15);
+    
+        return;
     }
+    
+    
+    
     
     context.clearRect(0, 0, canvas.width, canvas.height);
 

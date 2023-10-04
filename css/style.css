@@ -58,7 +58,7 @@ canvas {
   flex: auto;
   align-items: center;
 }
-#gameMenu #score {
+#gameMenu #score, #gameMenu #bestScore {
   font-size: 1.5rem;
 }
 #gameMenu li {
