@@ -8,6 +8,10 @@
             </li>
             <li id="score">Score: 0</li>
             <li id="bestScore"></li>
+            <div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid black; z-index: 10;">
+                <img id="randomGif" src="" alt="Random Gif" width="300">
+                <button onclick="closePopup()">Close</button>
+            </div>
         </ul>
         <button id="restartButton" style="display:none;">Restart</button>
     </div>
