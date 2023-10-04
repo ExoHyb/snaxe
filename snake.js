@@ -3,6 +3,8 @@ const context = canvas.getContext("2d");
 const boxSize = 20;
 let score = 0;
 const scoreElement = document.getElementById("score");
+let gameStarted = false; 
+let gameInterval;  // Declare gameInterval
 
 const grassImage = new Image();
 grassImage.src = "images/patterns/grass.png";
@@ -16,6 +18,44 @@ const foods = [
 ];
 
 let currentFood = randomFood();
+
+const imagesArray = [
+    "images/girl-1/step-1.jpeg",
+    "images/girl-1/step-2.jpeg",
+    // ... (rest of your image paths)
+];
+const imageElement = document.getElementById("sideImage");
+
+let snake = [{x: 5, y: 5}];
+let food = generateRandomPosition();
+let dx = 1;
+let dy = 0;
+let isPaused = false;
+
+function startGame() {
+    gameStarted = true;
+    initializeGame();
+}
+
+function drawStartButton() {
+    context.fillStyle = '#4CAF50'; // Couleur de fond du bouton
+    context.fillRect(canvas.width / 4, canvas.height / 2 - 30, canvas.width / 2, 60); // Dessine le bouton
+
+    context.fillStyle = 'white'; // Couleur du texte
+    context.font = '30px Arial';
+    context.textAlign = 'center';
+    context.fillText("Commencer la partie", canvas.width / 2, canvas.height / 2 + 10);
+}
+
+canvas.addEventListener("click", function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    if (!gameStarted && x > canvas.width / 4 && x < (canvas.width / 4) * 3 && y > canvas.height / 2 - 30 && y < canvas.height / 2 + 30) {
+        startGame();
+    }
+});
 
 function randomFood() {
     const randomIndex = Math.floor(Math.random() * foods.length);
@@ -35,25 +75,9 @@ function initializeGame() {
     gameInterval = setInterval(drawGame, 100);
 }
 
-
-
-const imagesArray = [
-    "images/girl-1/step-1.jpeg",
-    "images/girl-1/step-2.jpeg",
-    "images/girl-1/step-3.jpeg",
-    "images/girl-1/step-4.jpeg",
-    "images/girl-1/step-5.jpeg",
-    "images/girl-1/step-6.jpeg",
-    "images/girl-1/step-7.jpeg"
-];
-const imageElement = document.getElementById("sideImage");
-
 function updateImage() {
     imageElement.src = imagesArray[Math.min(Math.floor(score / 100), imagesArray.length - 1)];
 }
-
-let snake = [{x: 5, y: 5}];
-let food = generateRandomPosition();
 
 function generateRandomPosition() {
     return {
@@ -62,16 +86,11 @@ function generateRandomPosition() {
     };
 }
 
-let dx = 1;
-let dy = 0;
-
-document.addEventListener("keydown", changeDirection);
-
 function changeDirection(e) {
-    if (e.keyCode == 37 && dx === 0) {dx = -1; dy = 0;}
-    if (e.keyCode == 38 && dy === 0) {dx = 0; dy = -1;}
-    if (e.keyCode == 39 && dx === 0) {dx = 1; dy = 0;}
-    if (e.keyCode == 40 && dy === 0) {dx = 0; dy = 1;}
+    if (e.key === 'ArrowLeft' && dx === 0) {dx = -1; dy = 0;}
+    if (e.key === 'ArrowUp' && dy === 0) {dx = 0; dy = -1;}
+    if (e.key === 'ArrowRight' && dx === 0) {dx = 1; dy = 0;}
+    if (e.key === 'ArrowDown' && dy === 0) {dx = 0; dy = 1;}
 }
 
 function checkCollisionWithSelf() {
@@ -118,27 +137,39 @@ function drawSnakePart(part) {
     context.shadowOffsetY = 0;
 }
 
-let isPaused = false;
-
-function togglePause() {
-    if (isPaused) {
-        isPaused = false;
-        gameInterval = setInterval(drawGame, 100);  // Redémarre le jeu
-    } else {
-        isPaused = true;
-        clearInterval(gameInterval);  // Arrête le jeu
-    }
-}
-
 document.addEventListener("keydown", function(e) {
-    if (e.code === "Space") {  // Si la touche enfoncée est la barre d'espace
+    // For direction change
+    if (e.key === 'ArrowLeft' && dx === 0) {dx = -1; dy = 0;}
+    if (e.key === 'ArrowUp' && dy === 0) {dx = 0; dy = -1;}
+    if (e.key === 'ArrowRight' && dx === 0) {dx = 1; dy = 0;}
+    if (e.key === 'ArrowDown' && dy === 0) {dx = 0; dy = 1;}
+    
+    // For pausing game
+    if (e.key === " " || e.key === "Space") {  // We check for both possible values here
+        console.log("Space key pressed");  
+        e.preventDefault();
         togglePause();
     }
 });
 
-function drawGame() {
+function togglePause() {
+    if (isPaused) {
+        console.log("Resuming the game");  // Log when the game resumes
+        isPaused = false;
+        gameInterval = setInterval(drawGame, 100);
+    } else {
+        console.log("Pausing the game");  // Log when the game pauses
+        isPaused = true;
+        clearInterval(gameInterval);
+    }
+}
 
-    
+
+function drawGame() {
+    if(!gameStarted) {
+        drawStartButton();
+        return; // Si le jeu n'a pas démarré, on sort de la fonction après avoir dessiné le bouton
+    }
 
     if (isPaused) {
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -177,6 +208,10 @@ function drawGame() {
         snake.pop();
     }
 
+    const pattern = context.createPattern(grassImage, 'repeat');
+    context.fillStyle = pattern;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
     // Draw snake
     snake.forEach(drawSnakePart);
 
@@ -188,9 +223,9 @@ function drawGame() {
 
 document.getElementById("restartButton").addEventListener("click", function() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    clearInterval(gameInterval); // Important : arrêtez l'intervalle de jeu précédent
+    clearInterval(gameInterval);
     initializeGame();
 })
 
-updateImage();
-let gameInterval = setInterval(drawGame, 100);
+drawGame(); // Appel initial pour dessiner l'écran (y compris le bouton de démarrage).
+
