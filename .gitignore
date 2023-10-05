@@ -1,7 +1,9 @@
+# Dossiers spécifiques
 images/gif/
 images/girl-1/
 images/choice/
+
+# Types de fichiers
 *.gif
-css/
 *.css
 *.css.map
